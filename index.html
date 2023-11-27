@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample Site</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    body { padding-top: 50px; }
+  </style>
+
+<script src="http://localhost:5000/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+<script async>
+   var name = '';
+   var socket = io.connect('http://localhost:5000');
+   console.log(socket);
+
+ function clickme(){
+    let id = document.getElementById("name")
+    let text= document.getElementById("text")
+   socket.emit("data",id.value)
+
+    socket.on("notif",data =>{
+  
+    alert(data)
+   })
+ }
+   </script>
+</head>
+<body>
+ name :<input id="name" type="text">
+ <button onclick="clickme()">hello</button>
+
+ <h1 id="text"></h1>
+    
+</body>
+</html>

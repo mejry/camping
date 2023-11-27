@@ -8,7 +8,7 @@ const categoryroute=require("./routes/routecategory")
 const placerouter=require("./routes/routerplace")
 const userrouter=require("./routes/routeruser")
 const raterouter=require('./routes/raterouter')
-
+const path=require("path")
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser());
 
@@ -24,11 +24,15 @@ app.use("/rate",raterouter)
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 
-
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, '/index.html'));
+  });
 io.on('connection',socket=>{
-    socket.on("notif",async(data)=>{
-         await io.emit("notification","hellow world")
+ 
+   socket.on("data",data=>{
+    socket.emit("notif",data)
     })
+    
 
 })
 

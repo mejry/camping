@@ -16,9 +16,10 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage }); 
 
-router.post("/addplace",upload.array('images', 10),placecontrollers.addplace)
+router.post("/addplace",placecontrollers.addplace)
 router.put("/updateplace/:id",upload.array('images', 10),placecontrollers.updateplace)
 router.get("/getallplace",placecontrollers.getallplace)
 router.get("/getoneplace/:id",placecontrollers.getoneplace)
 router.delete("/deleteplace/:id",placecontrollers.deleteplace)
+router.get("/getmostrate",placecontrollers.mostrate)
 module.exports=router

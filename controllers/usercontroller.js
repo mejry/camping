@@ -20,7 +20,8 @@ exports.signup= async(req,res) =>{
 
     try {
         
-        const existeuser=((req.body.email).toLowerCase()).trim().slip()
+        const existeuser=((req.body.email).toLowerCase()).trim()
+        console.log(existeuser);
             const existbd= await user.findOne({
                 email:existeuser
             })
@@ -47,7 +48,7 @@ exports.signup= async(req,res) =>{
 
     } catch (error) {
         console.log(error);
-           res.status(400).json("faild to signup") 
+           res.status(400).json(error) 
         
     }
 }

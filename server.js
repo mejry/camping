@@ -6,9 +6,12 @@ const user=require("./models/users")
 const mongoose=require('mongoose')
 const categoryroute=require("./routes/routecategory")
 const placerouter=require("./routes/routerplace")
+const place =require("./models/Place")
 const userrouter=require("./routes/routeruser")
 const raterouter=require('./routes/raterouter')
+const contacrouter=require("./routes/contactrouter")
 const path=require("path")
+const cors = require('cors')
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser());
 
@@ -21,12 +24,18 @@ app.use("/category",categoryroute)
 app.use("/place",placerouter)
 app.use("/user",userrouter)
 app.use("/rate",raterouter)
+app.use("/contact",contacrouter)
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", " ,content-type");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  
+  next();
+ 
+});
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, '/index.html'));
-  });
 io.on('connection',socket=>{
  
    socket.on("data",data=>{

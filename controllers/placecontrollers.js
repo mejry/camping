@@ -22,18 +22,20 @@ exports.addplace=async(req,res)=>{
             gouvernerant:req.body.gouvernerant,
             ville:req.body.ville,
             description:req.body.description,
-            detail:req.body.detail,
-            pics:[]
+            detail:[],
+         
         })
         if(existe_user.role=="Admin" ||existe_user.role=="Moderateur" ){
             new_place.aproved=true
         }
         if (req.files && req.files.length > 0) {
             req.files.forEach(file => {
-                new_place.pics.push("http://localhost:5000" + file.path);
+                new_place.pics.push("http://localhost:5000/" + file.path);
             });
         }
-    
+    req.body.detail.map(details=>{
+      new_place.detail.push(details)
+    })
       const resultat=await new_place.save()
       await user.findByIdAndUpdate({
         _id:id
@@ -210,5 +212,42 @@ exports.deleteplace=async(req,res)=>{
     } catch (error) {
         console.log(error);
         res.status(400).json("faild delet place")
+    }
+}
+exports.mostrate=async(req,res)=>{
+    try { 
+        let allPlace=[]
+        let resultaplace=[]
+        const allplace = await place.find().populate("raiting");
+      
+        allplace.map(elem=>{
+            let scorerate=0
+        let nombre=0
+           elem.raiting.map(score=>{
+             nombre += score.scorerate
+           })
+    
+         if(nombre>0){
+            scorerate = nombre/elem.raiting.length
+           
+        }else{
+            scorerate=0
+        }
+          
+                      allPlace.push({
+                        elem,
+                        scorerate
+                         
+                      })
+        })
+       
+     allPlace.sort((a, b) => (a.scorerate < b.scorerate ? 1 : -1))
+       for (let i = 0; i < 3; i++) {
+        resultaplace.push(allPlace[i]);
+      }
+       console.log(resultaplace);
+       res.status(200).json(resultaplace)
+    } catch (error) {
+        console.log(error);
     }
 }

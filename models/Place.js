@@ -16,7 +16,7 @@ const Placeschema=new mongoose.Schema({
         type:String
     },
     detail:{
-        type:String
+        type:[String]
     },
     gouvernerant:{
         type:String
